@@ -1,4 +1,4 @@
-package fr.dufaure.clement.adventofcode;
+package fr.dufaure.clement.adventofcode.event2017;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
