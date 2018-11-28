@@ -74,7 +74,7 @@ public class day4 {
   }
 
   public static void day3Part1() {
-    List<String> data = importFile("./src/main/resources/day3");
+    List<String> data = importFile("./src/main/resources/2017/day3");
     int nbOk = 0;
     for (String ligne : data) {
       List<String> mots = parseligne(ligne);
@@ -97,7 +97,7 @@ public class day4 {
   }
 
   public static void day3Part2() {
-    List<String> data = importFile("./src/main/resources/day3");
+    List<String> data = importFile("./src/main/resources/2017/day3");
     int nbOk = 0;
     for (String ligne : data) {
       List<String> mots = parseligne(ligne);

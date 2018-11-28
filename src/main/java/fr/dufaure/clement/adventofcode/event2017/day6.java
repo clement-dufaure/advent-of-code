@@ -49,7 +49,7 @@ public class day6 {
   public static List<List<Integer>> combinaisonsObservees = new ArrayList<>();
 
   public static void day6Part1() {
-    String data = importFile("./src/main/resources/day6");
+    String data = importFile("./src/main/resources/2017/day6");
     List<Integer> bancs = parseligne(data);
     int nbOperations = 0;
     do {

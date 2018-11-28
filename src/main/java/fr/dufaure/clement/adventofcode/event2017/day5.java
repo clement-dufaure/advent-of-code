@@ -31,7 +31,7 @@ public class day5 {
   }
 
   public static void day4Part1() {
-    List<Integer> data = importFile("./src/main/resources/day4");
+    List<Integer> data = importFile("./src/main/resources/2017/day4");
     int nbOperations = 0;
     int emplacementCourant = 0;
     int nouvelEmplacementCourant = 0;
@@ -45,7 +45,7 @@ public class day5 {
   }
 
   public static void day4Part2() {
-    List<Integer> data = importFile("./src/main/resources/day4");
+    List<Integer> data = importFile("./src/main/resources/2017/day4");
     int nbOperations = 0;
     int emplacementCourant = 0;
     int nouvelEmplacementCourant = 0;

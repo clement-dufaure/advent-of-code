@@ -49,7 +49,7 @@ public class day2 {
   }
 
   public static void day2Part1() {
-    List<String> data = importFile("./src/main/resources/day2");
+    List<String> data = importFile("./src/main/resources/2017/day2");
     int somme = 0;
     for (String ligne : data) {
       List<Integer> entiers = parseligne(ligne);
@@ -61,7 +61,7 @@ public class day2 {
   }
 
   public static void day2Part2() {
-    List<String> data = importFile("./src/main/resources/day2");
+    List<String> data = importFile("./src/main/resources/2017/day2");
     int somme = 0;
     for (String ligne : data) {
       List<Integer> entiers = parseligne(ligne);
