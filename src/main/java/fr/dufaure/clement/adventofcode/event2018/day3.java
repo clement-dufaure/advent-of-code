@@ -8,8 +8,8 @@ import fr.dufaure.clement.adventofcode.utils.ImportUtils;
 public class day3 {
 
   public static void main(String[] args) {
-    day1Part1();
-    day1Part2();
+    part1();
+    part2();
   }
 
   public static Claim parseLigne(String ligne) {
@@ -50,8 +50,7 @@ public class day3 {
     }
   }
 
-  public static void day1Part1() {
-
+  public static void part1() {
     // verification des cases >=2
     int nbCasesDemandesParPlusUnElfe = 0;
     for (int i = 0; i < 1000; i++) {
@@ -61,12 +60,10 @@ public class day3 {
         }
       }
     }
-
     System.out.println(nbCasesDemandesParPlusUnElfe);
-
   }
 
-  public static void day1Part2() {
+  public static void part2() {
     // Verification des claims non superposees
     loopClaim: for (Claim claim : claims) {
       for (int i = claim.topOffset; i < claim.topOffset + claim.height; i++) {

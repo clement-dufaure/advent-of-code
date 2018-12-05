@@ -9,11 +9,11 @@ import fr.dufaure.clement.adventofcode.utils.ImportUtils;
 public class day2 {
 
 	public static void main(String[] args) {
-		day1Part1();
-		day1Part2();
+		part1();
+		part2();
 	}
 
-	public static void day1Part1() {
+	public static void part1() {
 		List<String> data = ImportUtils.getListStringUnParLigne("./src/main/resources/2018/day2");
 		int nbLignesAvecLettreDouble = 0;
 		int nbLignesAvecLettreTriple = 0;
@@ -37,7 +37,7 @@ public class day2 {
 		System.out.println(nbLignesAvecLettreDouble * nbLignesAvecLettreTriple);
 	}
 
-	public static void day1Part2() {
+	public static void part2() {
 		List<String> data = ImportUtils.getListStringUnParLigne("./src/main/resources/2018/day2");
 		bouclePremierString: for (int i = 0; i < data.size(); i++) {
 			for (int j = i; j < data.size(); j++) {

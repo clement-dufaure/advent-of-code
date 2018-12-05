@@ -63,7 +63,6 @@ public class day4 {
     nights.remove(0);
   }
 
-
   public static void completerNuit(Night nuit, int jusqueIndex) {
     State etatACompleter;
     if (nuit.etatsDuGardeParMinute.size() > 0) {
@@ -120,7 +119,6 @@ public class day4 {
       }
     }
 
-
     int maxFrequecyMinute = 0;
     int minuteMaxfrequecy = -1;
 
@@ -133,7 +131,6 @@ public class day4 {
     }
 
     System.out.println(guardeDuMaxCourant * minuteMaxfrequecy);
-
   }
 
   public static void part2() {
@@ -151,7 +148,6 @@ public class day4 {
         }
       }
     }
-
     System.out.println(guardeDuMaxCourant * minuteDuMax);
   }
 
