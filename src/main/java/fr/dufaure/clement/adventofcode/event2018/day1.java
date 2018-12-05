@@ -7,8 +7,12 @@ import fr.dufaure.clement.adventofcode.utils.ImportUtils;
 public class day1 {
 
   public static void main(String[] args) {
+    long start1 = System.currentTimeMillis();
     part1();
+    System.out.println("Execution part 1 en " + (System.currentTimeMillis() - start1) + " ms");
+    long start2 = System.currentTimeMillis();
     part2();
+    System.out.println("Execution part 2 en " + (System.currentTimeMillis() - start2) + " ms");
   }
 
   public static void part1() {
