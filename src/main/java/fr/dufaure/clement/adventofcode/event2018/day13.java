@@ -14,11 +14,15 @@ public class day13 {
 	}
 
 	static List<List<Rail>> reseau;
+	static List<Wagonnet> wagonnets;
 
 	static {
 		// creation du reseau
 		reseau = ImportUtils.getListStringUnParLigne("./src/main/resources/2018/day13").stream().map(day13::parseLigne)
 				.collect(Collectors.toList());
+
+		wagonnets = ImportUtils.getListStringUnParLigne("./src/main/resources/2018/day13").stream()
+				.map(day13::rechercheWagonnetsLigne).flatMap(List::stream).collect(Collectors.toList());
 	}
 
 	static List<Rail> parseLigne(String ligne) {
@@ -31,6 +35,18 @@ public class day13 {
 			rails.add(Rail.getTypeRailFromChar(c));
 		}
 		return rails;
+	}
+
+	static List<Wagonnet> rechercheWagonnetsLigne(String ligne) {
+		List<Wagonnet> wagonnets = new ArrayList<>();
+		for (char c : ligne.toCharArray()) {
+			if (c == '<' || c == '>' || c == '^' || c == 'v') {
+				Wagonnet w = new Wagonnet();
+				// w.x;
+			}
+
+		}
+		return wagonnets;
 	}
 
 	static void part1() {
@@ -56,8 +72,12 @@ public class day13 {
 			return Rail.RIEN;
 		}
 	}
-	
-	public static class Wagonnet{
+
+	public static enum Orientation {
+		UP, DOWN, LEFT, RIGHT;
+	}
+
+	public static class Wagonnet {
 		int x;
 		int y;
 		Orientation orientation;
