@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import fr.dufaure.clement.adventofcode.utils.ImportUtils;
 
-public class day13 {
+public class day13part2 {
   public static void main(String[] args) {
     long start1 = System.currentTimeMillis();
-    part1();
+    part2();
     System.out.println("Execution part 1 en " + (System.currentTimeMillis() - start1) + " ms");
   }
 
@@ -19,7 +19,7 @@ public class day13 {
   static {
     // creation du reseau
     reseau = ImportUtils.getListStringUnParLigne("./src/main/resources/2018/day13").stream()
-        .map(day13::parseLigne).collect(Collectors.toList());
+        .map(day13part2::parseLigne).collect(Collectors.toList());
 
     List<String> lignes = ImportUtils.getListStringUnParLigne("./src/main/resources/2018/day13");
     for (int i = 0; i < lignes.size(); i++) {
@@ -57,10 +57,13 @@ public class day13 {
   // true si collision
   static boolean avancerLesWagonets() {
     Collections.sort(wagonnets);
-    for (Wagonnet w : wagonnets) {
-      if (avancerWagonnet(w)) {
-        return true;
-      }
+    List<Wagonnet> listeDeTravail = new ArrayList<>(wagonnets);
+    for (Wagonnet w : listeDeTravail) {
+      avancerWagonnet(w);
+    }
+    if (wagonnets.size() == 1) {
+      System.out.println("Dernier wagonnet : " + wagonnets.get(0).x + "," + wagonnets.get(0).y);
+      return true;
     }
     return false;
   }
@@ -148,7 +151,19 @@ public class day13 {
     }
     if (wagonsEnCollision()) {
       System.out.println("Collision : " + xEnCollision + "," + yEnCollision);
-      return true;
+      // remove wagon en colisions
+      List<Wagonnet> wagonsEnCollision = new ArrayList<>();
+      for (Wagonnet wagon : wagonnets) {
+        if ((wagon.x == xEnCollision) && (wagon.y == yEnCollision)) {
+          wagonsEnCollision.add(wagon);
+        }
+      }
+      if (wagonsEnCollision.size() != 2) {
+        System.err.println("ERROR : " + wagonsEnCollision.size());
+      } else {
+        wagonnets.remove(wagonsEnCollision.get(0));
+        wagonnets.remove(wagonsEnCollision.get(1));
+      }
     }
     return false;
   }
@@ -169,7 +184,7 @@ public class day13 {
   static int xEnCollision;
   static int yEnCollision;
 
-  static void part1() {
+  static void part2() {
     while (!avancerLesWagonets()) {
     }
   }
@@ -214,10 +229,16 @@ public class day13 {
   }
 
   public static class Wagonnet implements Comparable<Wagonnet> {
+    static int compteur = 0;
+    int id;
     int x;
     int y;
     Orientation orientation;
     Orientation nextCross = Orientation.LEFT;
+
+    public Wagonnet() {
+      id = compteur++;
+    }
 
     public void cross() {
       switch (nextCross) {
