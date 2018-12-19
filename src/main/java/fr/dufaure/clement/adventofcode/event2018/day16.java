@@ -199,7 +199,7 @@ public class day16 {
 
   public static enum TypeOperation {
     ADD((a, b) -> a + b), MUL((a, b) -> a * b), BAN((a, b) -> a & b), BOR((a, b) -> a | b), SET(
-        (a, b) -> a), GT((a, b) -> a > b ? 1 : 0), EQ((a, b) -> a == b ? 1 : 0);
+        (a, b) -> a), GT((a, b) -> a > b ? 1 : 0), EQ((a, b) -> a.equals(b) ? 1 : 0);
 
     BiFunction<Integer, Integer, Integer> fonction;
 
