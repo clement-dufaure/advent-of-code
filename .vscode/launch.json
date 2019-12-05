@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - day7",
+            "request": "launch",
+            "mainClass": "fr.dufaure.clement.adventofcode.event2016.day7",
+            "projectName": "adventofcode"
+        }
+    ]
+}
