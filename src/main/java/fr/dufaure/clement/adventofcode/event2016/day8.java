@@ -1,109 +1,108 @@
 package fr.dufaure.clement.adventofcode.event2016;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import fr.dufaure.clement.adventofcode.utils.ImportUtils;
+public class day8 {
 
-public class day7 {
+    public static void main(String[] args) throws Exception {
+        long start1 = System.currentTimeMillis();
+        part1();
+        System.out.println("Execution part 1 en " + (System.currentTimeMillis() - start1) + " ms");
+        long start2 = System.currentTimeMillis();
+        part2();
+        System.out.println("Execution part 2 en " + (System.currentTimeMillis() - start2) + " ms");
+    }
 
-	public static void main(String[] args) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		long start1 = System.currentTimeMillis();
-		part1();
-		// 120 yoo high
-		System.out.println("Execution part 1 en " + (System.currentTimeMillis() - start1) + " ms");
-		long start2 = System.currentTimeMillis();
-		part2();
-		System.out.println("Execution part 2 en " + (System.currentTimeMillis() - start2) + " ms");
-	}
+    static boolean[][] screen = new boolean[6][50];
 
-	static void part1() {
-		System.out.println(ImportUtils.getListStringUnParLigne("./src/main/resources/2016/day7").stream()
-				.filter(day7::isTlsCompatible).count());
-	}
+    static void part1() throws IOException {
+        Files.lines(Paths.get("./src/main/resources/2016/day8")).forEach(day8::apply);
+        System.out.println(count());
+    }
 
-	static void part2() {
-		System.out.println(ImportUtils.getListStringUnParLigne("./src/main/resources/2016/day7").stream()
-				.filter(day7::isSslCompatible).count());
-	}
+    static void apply(String instruction) {
+        String[] instructions = instruction.split(" ");
+        switch (instructions[0]) {
+        case "rect":
+            int[] dimensions = Arrays.asList(instructions[1].split("x")).stream().mapToInt(s -> Integer.parseInt(s))
+                    .toArray();
+            applyRect(dimensions[0], dimensions[1]);
+            break;
+        case "rotate":
+            applyRotate(instructions[1], Integer.parseInt(instructions[2].split("=")[1]),
+                    Integer.parseInt(instructions[4]));
+            break;
+        default:
+            break;
+        }
+        display();
+    }
 
-	static boolean isTlsCompatible(String ipv7) {
-		Matcher m = Pattern.compile("\\[([a-z]*)\\]").matcher(ipv7);
-		while (m.find()) {
-			// verification absence chaine type abba dans les crochets
-			if (contientABBA(m.group(1))) {
-				return false;
-			}
-		}
-		// verification presence chaine type abba hors des crochets
-		for (String chaine : ipv7.split("\\[[a-z]*\\]")) {
-			if (contientABBA(chaine)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    static void applyRect(int wide, int tall) {
+        for (int x = 0; x < wide; x++) {
+            for (int y = 0; y < tall; y++) {
+                screen[y][x] = true;
+            }
+        }
+    }
 
-	static boolean contientABBA(String chaine) {
-		if (chaine.length() < 4) {
-			return false;
-		}
-		for (int index = 0; index <= chaine.length() - 4; index++) {
-			if (isABBA(chaine.substring(index, index + 4))) {
-				return true;
-			}
-		}
-		return false;
-	}
+    static void applyRotate(String type, int rowOrColum, int by) {
+        switch (type) {
+        case "row":
+            applyRotateRow(rowOrColum, by);
+            break;
+        case "column":
+            applyRotateColumn(rowOrColum, by);
+            break;
+        default:
+            break;
+        }
+    }
 
-	static boolean isABBA(String chaine) {
-		return chaine.length() == 4 && chaine.charAt(0) == chaine.charAt(3) && chaine.charAt(1) == chaine.charAt(2)
-				&& chaine.charAt(0) != chaine.charAt(1);
-	}
+    static void applyRotateRow(int row, int by) {
+        boolean[] line = screen[row].clone();
+        for (int i = 0; i < screen[row].length; i++) {
+            screen[row][i] = line[(i - by + 2 * line.length) % line.length];
+        }
+    }
 
-	static boolean isSslCompatible(String ipv7) {
-		List<String> abas = new ArrayList<>();
-		Matcher m = Pattern.compile("\\[([a-z]*)\\]").matcher(ipv7);
-		while (m.find()) {
-			// recuperation de tous les abas dans le crochet
-			abas.addAll(getAllABAs(m.group(1)));
-		}
-		// inversion des abas en babs pour comparaison
-		abas = abas.stream().map(day7::changeABAtoBAB).collect(Collectors.toList());
-		// recherche de bab hors crochets
-		for (String chaine : ipv7.split("\\[[a-z]*\\]")) {
-			if (!Collections.disjoint(getAllABAs(chaine), abas)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    static void applyRotateColumn(int column, int by) {
+        Object[] colonneObject = Arrays.asList(screen).stream().map(row -> row[column]).collect(Collectors.toList())
+                .toArray();
+        Boolean[] colonne = Arrays.copyOf(colonneObject, colonneObject.length, Boolean[].class);
+        for (int i = 0; i < screen.length; i++) {
+            screen[i][column] = colonne[(i - by + 2 * colonne.length) % colonne.length];
+        }
+    }
 
-	static List<String> getAllABAs(String chaine) {
-		List<String> maListe = new ArrayList<>();
-		if (chaine.length() < 3) {
-			return maListe;
-		}
-		for (int index = 0; index <= chaine.length() - 3; index++) {
-			if (isABA(chaine.substring(index, index + 3))) {
-				maListe.add(chaine.substring(index, index + 3));
-			}
-		}
-		return maListe;
-	}
+    static int count() {
+        int count = 0;
+        for (boolean[] ligne : screen) {
+            for (boolean pixel : ligne) {
+                if (pixel) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
 
-	static boolean isABA(String chaine) {
-		return chaine.length() == 3 && chaine.charAt(0) == chaine.charAt(2) && chaine.charAt(0) != chaine.charAt(1);
-	}
+    static void display() {
+        for (boolean[] ligne : screen) {
+            for (boolean pixel : ligne) {
+                System.out.print(pixel ? "#" : ".");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
 
-	static String changeABAtoBAB(String aba) {
-		return "" + aba.charAt(1) + aba.charAt(0) + aba.charAt(1);
-	}
+    static void part2() {
+
+    }
 
 }
