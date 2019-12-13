@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import fr.dufaure.clement.adventofcode.utils.ImportUtils;
 
-public class day11 {
+public class day13 {
 
 	public static void main(String[] args) {
 		long start1 = System.currentTimeMillis();
@@ -18,32 +19,76 @@ public class day11 {
 		System.out.println("Execution part 2 en " + (System.currentTimeMillis() - start2) + " ms");
 	}
 
-	private static void part1() {
-		Robot bot = new Robot();
-		bot.execute();
-		System.out.println(bot.positionPeintes.size());
+	static void part1() {
+		Arcade a = new Arcade(false);
+		String[] output = a.runProgramme(null).split("\\n");
+		int i = 0;
+		while (i < output.length) {
+			screen.put(new Coord(Integer.parseInt(output[i]), Integer.parseInt(output[i + 1])),
+					Integer.parseInt(output[i + 2]));
+			i += 3;
+		}
+		System.out.println(screen.values().stream().filter(tileId -> tileId == 2).count());
 	}
 
-	private static void part2() {
-		Robot bot = new Robot();
-		bot.positionPeintes.put(new Coord(0, 0), 1);
-		bot.execute();
-		int minX = bot.positionPeintes.keySet().stream().mapToInt(c -> c.x).min()
-				.orElseThrow(UnsupportedOperationException::new);
-		int minY = bot.positionPeintes.keySet().stream().mapToInt(c -> c.y).min()
-				.orElseThrow(UnsupportedOperationException::new);
-		int maxX = bot.positionPeintes.keySet().stream().mapToInt(c -> c.x).max()
-				.orElseThrow(UnsupportedOperationException::new);
-		int maxY = bot.positionPeintes.keySet().stream().mapToInt(c -> c.y).max()
-				.orElseThrow(UnsupportedOperationException::new);
+	static void part2() {
+		screen = new HashMap<>();
+		Arcade a = new Arcade(true);
+		// init
+		adjustScreen(a.runProgramme(null));
+		afficherScreen();
+		Random r = new Random();
+		while (!a.stopped) {
+			long mvt = (long) r.nextInt(3) - 1;
+			adjustScreen(a.runProgramme(mvt));
+			afficherScreen();
+		}
 
-		for (int i = Math.abs(minY) + Math.abs(maxY); i >= 0; i--) {
-			for (int j = 0; j < Math.abs(minX) + Math.abs(maxX); j++) {
-				if (bot.positionPeintes.containsKey(new Coord(j - Math.abs(minX), i - Math.abs(minY)))) {
-					if (bot.positionPeintes.get(new Coord(j - Math.abs(minX), i - Math.abs(minY))) == 1) {
-						System.out.print("#");
-					} else {
+	}
+
+	static void adjustScreen(String outputStr) {
+		String[] output = outputStr.split("\\n");
+		int i = 0;
+		while (i < output.length) {
+			if (Integer.parseInt(output[i]) >= 0) {
+				screen.put(new Coord(Integer.parseInt(output[i]), Integer.parseInt(output[i + 1])),
+						Integer.parseInt(output[i + 2]));
+			} else if (Integer.parseInt(output[i]) == -1 && Integer.parseInt(output[i + 1]) == 0) {
+				segmentDisplay = Integer.parseInt(output[i + 2]);
+			} else {
+				throw new UnsupportedOperationException("output impossible");
+			}
+			i += 3;
+		}
+	}
+
+	static void afficherScreen() {
+		System.out.println("SCORE : " + segmentDisplay + "  BLOCKS RESTANTS : "
+				+ screen.values().stream().filter(tileId -> tileId == 2).count());
+		int maxX = screen.keySet().stream().mapToInt(c -> c.x).max().orElseThrow(UnsupportedOperationException::new);
+		int maxY = screen.keySet().stream().mapToInt(c -> c.y).max().orElseThrow(UnsupportedOperationException::new);
+
+		for (int i = 0; i <= Math.abs(maxY); i++) {
+			for (int j = 0; j <= Math.abs(maxX); j++) {
+				if (screen.containsKey(new Coord(j, i))) {
+					switch (screen.get(new Coord(j, i))) {
+					case 0:
 						System.out.print(".");
+						break;
+					case 1:
+						System.out.print("#");
+						break;
+					case 2:
+						System.out.print("B");
+						break;
+					case 3:
+						System.out.print("-");
+						break;
+					case 4:
+						System.out.print("O");
+						break;
+					default:
+						break;
 					}
 				} else {
 					System.out.print(".");
@@ -53,88 +98,16 @@ public class day11 {
 		}
 	}
 
-	static class Robot {
-		RobotBrain brain = new RobotBrain();
-		Coord position = new Coord(0, 0);
-		Direction direction = Direction.UP;
+	static Map<Coord, Integer> screen = new HashMap<>();
+	static int segmentDisplay = 0;
 
-		Map<Coord, Integer> positionPeintes = new HashMap<>();
+	static enum Tile {
+		EMPTY(0), WALL(1), BLOCK(2), PADDLE(3), BALL(4);
 
-		void execute() {
-			while (!brain.stopped) {
-				int[] output;
-				if (positionPeintes.containsKey(position)) {
-					output = brain.runProgramme(positionPeintes.get(position));
-				} else {
-					// noir si on est pas encore passé
-					output = brain.runProgramme(0);
-				}
+		int id;
 
-				// peinture
-				positionPeintes.put(new Coord(position.x, position.y), output[0]);
-
-				// on tourne
-				if (output[1] == 0) {
-					direction = Direction.turnLeft(direction);
-				} else if (output[1] == 1) {
-					direction = Direction.turnRight(direction);
-				} else {
-					System.err.println("Le robot n'a pas tourné");
-				}
-
-				// on avance
-				switch (direction) {
-				case UP:
-					position.y++;
-					break;
-				case DOWN:
-					position.y--;
-					break;
-				case LEFT:
-					position.x--;
-					break;
-				case RIGHT:
-					position.x++;
-					break;
-				default:
-					System.err.println("Le robot n'a pas avancé");
-					break;
-				}
-
-			}
-		}
-
-	}
-
-	static enum Direction {
-		UP, DOWN, LEFT, RIGHT;
-
-		static Direction turnRight(Direction direction) {
-			switch (direction) {
-			case UP:
-				return RIGHT;
-			case DOWN:
-				return LEFT;
-			case LEFT:
-				return UP;
-			case RIGHT:
-				return DOWN;
-			}
-			throw new UnsupportedOperationException();
-		}
-
-		static Direction turnLeft(Direction direction) {
-			switch (direction) {
-			case UP:
-				return LEFT;
-			case DOWN:
-				return RIGHT;
-			case LEFT:
-				return DOWN;
-			case RIGHT:
-				return UP;
-			}
-			throw new UnsupportedOperationException();
+		Tile(int id) {
+			this.id = id;
 		}
 	}
 
@@ -142,7 +115,7 @@ public class day11 {
 		int x;
 		int y;
 
-		public Coord(int x, int y) {
+		Coord(int x, int y) {
 			this.x = x;
 			this.y = y;
 		}
@@ -174,29 +147,31 @@ public class day11 {
 
 	}
 
-	static class RobotBrain {
+	public static class Arcade {
+
+		boolean stopped = false;
+		long relativeBase = 0;
 		int pointeur = 0;
 		ArrayList<Long> listeCode = new ArrayList<>();
-		long relativeBase = 0;
-		boolean stopped = false;
 
-		RobotBrain() {
-			String[] liste = ImportUtils.getString("./src/main/resources/2019/day11").split(",");
+		Arcade(boolean playForFree) {
+			String[] liste = ImportUtils.getString("./src/main/resources/2019/day13").split(",");
+
 			for (int i = 0; i < liste.length; i++) {
 				listeCode.add(Long.valueOf(liste[i]));
 			}
-		}
-
-		public int[] runProgramme(int input) {
-			int[] output = new int[2];
-			boolean inputRead = false;
-			boolean outputFirstValue = false;
-			boolean outputSecondValue = false;
-
 			// on ajoute des 0 a la fin
 			for (int i = 0; i < 1000; i++) {
 				listeCode.add(0L);
 			}
+			if (playForFree) {
+				listeCode.set(0, 2L);
+			}
+		}
+
+		public String runProgramme(Long input) {
+			boolean inputSet = false;
+			StringBuffer output = new StringBuffer();
 
 			mainLoop: while (true) {
 				long parameter1;
@@ -223,31 +198,22 @@ public class day11 {
 					pointeur += 4;
 					break;
 				case "3":
-					if (outputFirstValue && outputSecondValue) {
-						// wait next input
-						return output;
-					}
-
-					if (inputRead) {
-						throw new UnsupportedOperationException("input already read");
-					}
-					inputRead = true;
-					listeCode.set(getWhereToWrite(listeCode, (listeCode.get(pointeur) % 1000) / 100,
-							listeCode.get(pointeur + 1), relativeBase).intValue(), (long) input);
-					pointeur += 2;
-					break;
-				case "4":
-					if (!outputFirstValue) {
-						outputFirstValue = true;
-						output[0] = (int) (long) getParameter(listeCode, (listeCode.get(pointeur) % 1000) / 100,
-								listeCode.get(pointeur + 1), relativeBase);
-					} else if (!outputSecondValue) {
-						outputSecondValue = true;
-						output[1] = (int) (long) getParameter(listeCode, (listeCode.get(pointeur) % 1000) / 100,
-								listeCode.get(pointeur + 1), relativeBase);
+					// if (playForFree) {
+					if (input != null && !inputSet) {
+						listeCode.set(getWhereToWrite(listeCode, (listeCode.get(pointeur) % 1000) / 100,
+								listeCode.get(pointeur + 1), relativeBase).intValue(), (long) input);
+						pointeur += 2;
+						inputSet = true;
 					} else {
-						throw new UnsupportedOperationException("Too many outputs !!!");
+						return output.toString();
 					}
+					break;
+				// } else {
+				// throw new UnsupportedOperationException("Pas d'input");
+				// }
+				case "4":
+					output.append(getParameter(listeCode, (listeCode.get(pointeur) % 1000) / 100,
+							listeCode.get(pointeur + 1), relativeBase) + "\n");
 					pointeur += 2;
 					break;
 				case "5":
@@ -303,9 +269,8 @@ public class day11 {
 					throw new UnsupportedOperationException();
 				}
 			}
-			// endOfProgram
 			stopped = true;
-			return output;
+			return output.toString();
 		}
 
 		static Long getParameter(List<Long> programme, long parameterMode, Long value, Long relativeBase) {
@@ -335,6 +300,6 @@ public class day11 {
 				throw new UnsupportedOperationException();
 			}
 		}
-
 	}
+
 }
