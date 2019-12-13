@@ -18,10 +18,14 @@ public class day23 {
         System.out.println("Execution part 2 en " + (System.currentTimeMillis() - start2) + " ms");
     }
 
-    static int registerA = 0;
-    static int registerB = 0;
+    // static int registerA = 0;
+    // static int registerB = 0;
 
     static List<Instruction> programme = new ArrayList<>();
+
+    static {
+        initialize();
+    }
 
     static void initialize() {
         List<String> liste = ImportUtils.getListStringUnParLigne("./src/main/resources/2015/day23");
@@ -29,7 +33,7 @@ public class day23 {
         for (String ligne : liste) {
             Matcher matcher = p.matcher(ligne);
             if (matcher.matches()) {
-                if (matcher.groupCount() == 2) {
+                if (matcher.group(3) == null) {
                     if (matcher.group(2).equals("a") || matcher.group(2).equals("b")) {
                         programme.add(new Instruction(TypeInstruction.valueOf(matcher.group(1)),
                                 Register.valueOf(matcher.group(2))));
@@ -39,11 +43,9 @@ public class day23 {
                     }
                 }
 
-                else if (matcher.groupCount() == 3) {
+                else {
                     programme.add(new Instruction(TypeInstruction.valueOf(matcher.group(1)),
                             Register.valueOf(matcher.group(2)), Integer.parseInt(matcher.group(3))));
-                } else {
-                    System.err.println("Problem");
                 }
             } else {
                 System.err.println("Ligne non lue");
@@ -53,9 +55,49 @@ public class day23 {
     }
 
     private static void part1() {
+        int pointeur = 0;
+        while (pointeur >= 0 && pointeur < programme.size()) {
+            switch (programme.get(pointeur).typeInstruction) {
+            case hlf:
+                programme.get(pointeur).register.value = programme.get(pointeur).register.value / 2;
+                pointeur++;
+                break;
+            case tpl:
+                programme.get(pointeur).register.value = programme.get(pointeur).register.value * 3;
+                pointeur++;
+                break;
+            case inc:
+                programme.get(pointeur).register.value++;
+                pointeur++;
+                break;
+            case jmp:
+                pointeur += programme.get(pointeur).offset;
+                break;
+            case jie:
+                if (programme.get(pointeur).register.value % 2 == 0) {
+                    pointeur += programme.get(pointeur).offset;
+                } else {
+                    pointeur++;
+                }
+                break;
+            case jio:
+                if (programme.get(pointeur).register.value == 1) {
+                    pointeur += programme.get(pointeur).offset;
+                } else {
+                    pointeur++;
+                }
+                break;
+            default:
+                break;
+            }
+        }
+        System.out.println(Register.b.value);
     }
 
     private static void part2() {
+        Register.a.value = 1;
+        Register.b.value = 0;
+        part1();
     }
 
     static enum Register {
