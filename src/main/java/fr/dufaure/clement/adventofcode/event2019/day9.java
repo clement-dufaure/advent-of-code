@@ -108,8 +108,9 @@ public class day9 {
 						getWhereToWrite(listeCode, (listeCode.get(pointeur) % 100000) / 10000,
 								listeCode.get(pointeur + 3), relativeBase).intValue(),
 						getParameter(listeCode, (listeCode.get(pointeur) % 1000) / 100, listeCode.get(pointeur + 1),
-								relativeBase) == getParameter(listeCode, (listeCode.get(pointeur) % 10000) / 1000,
-										listeCode.get(pointeur + 2), relativeBase) ? 1L : 0L);
+								relativeBase)
+										.equals(getParameter(listeCode, (listeCode.get(pointeur) % 10000) / 1000,
+												listeCode.get(pointeur + 2), relativeBase)) ? 1L : 0L);
 				pointeur += 4;
 				break;
 			case "9":
