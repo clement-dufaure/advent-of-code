@@ -7,13 +7,7 @@ import java.util.Map;
 
 import fr.dufaure.clement.adventofcode.utils.ImportUtils;
 
-public class day13 {
-
-	static final boolean displayMode = false;
-
-	/**
-	 * EMPTY(0), WALL(1), BLOCK(2), PADDLE(3), BALL(4);
-	 */
+public class day13Test2 {
 
 	public static void main(String[] args) {
 		long start1 = System.currentTimeMillis();
@@ -41,9 +35,7 @@ public class day13 {
 		Arcade a = new Arcade(true);
 		// init
 		adjustScreen(a.runProgramme(null));
-		if (displayMode) {
-			afficherScreen();
-		}
+		afficherScreen();
 
 		while (!a.stopped) {
 			int coordBallx = screen.entrySet().stream().filter(e -> e.getValue() == 4).findFirst().get().getKey().x;
@@ -55,12 +47,18 @@ public class day13 {
 			} else {
 				adjustScreen(a.runProgramme(0L));
 			}
-			if (displayMode) {
-				afficherScreen();
-			}
+			afficherScreen();
 		}
-		System.out.println("SCORE : " + segmentDisplay + "  BLOCKS RESTANTS : "
-				+ screen.values().stream().filter(tileId -> tileId == 2).count());
+
+	}
+
+	static enum DynamiqueBall {
+		LEFT, RIGHT;
+	}
+
+	static enum DynamiqueBallY {
+		UP, DOWN;
+
 	}
 
 	static void adjustScreen(String outputStr) {
@@ -117,6 +115,16 @@ public class day13 {
 
 	static Map<Coord, Integer> screen = new HashMap<>();
 	static int segmentDisplay = 0;
+
+	static enum Tile {
+		EMPTY(0), WALL(1), BLOCK(2), PADDLE(3), BALL(4);
+
+		int id;
+
+		Tile(int id) {
+			this.id = id;
+		}
+	}
 
 	static class Coord {
 		int x;
@@ -205,6 +213,7 @@ public class day13 {
 					break;
 				case "3":
 					// if (playForFree) {
+					System.out.println("RUN");
 					if (input != null && !inputSet) {
 						listeCode.set(getWhereToWrite(listeCode, (listeCode.get(pointeur) % 1000) / 100,
 								listeCode.get(pointeur + 1), relativeBase).intValue(), (long) input);
