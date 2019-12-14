@@ -4,11 +4,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import fr.dufaure.clement.adventofcode.utils.ImportUtils;
 
 public class day13 {
+
+	static final boolean displayMode = false;
+
+	/**
+	 * EMPTY(0), WALL(1), BLOCK(2), PADDLE(3), BALL(4);
+	 */
 
 	public static void main(String[] args) {
 		long start1 = System.currentTimeMillis();
@@ -36,14 +41,26 @@ public class day13 {
 		Arcade a = new Arcade(true);
 		// init
 		adjustScreen(a.runProgramme(null));
-		afficherScreen();
-		Random r = new Random();
-		while (!a.stopped) {
-			long mvt = (long) r.nextInt(3) - 1;
-			adjustScreen(a.runProgramme(mvt));
+		if (displayMode) {
 			afficherScreen();
 		}
 
+		while (!a.stopped) {
+			int coordBallx = screen.entrySet().stream().filter(e -> e.getValue() == 4).findFirst().get().getKey().x;
+			int coordRaquettex = screen.entrySet().stream().filter(e -> e.getValue() == 3).findFirst().get().getKey().x;
+			if (coordRaquettex < coordBallx) {
+				adjustScreen(a.runProgramme(1L));
+			} else if (coordRaquettex > coordBallx) {
+				adjustScreen(a.runProgramme(-1L));
+			} else {
+				adjustScreen(a.runProgramme(0L));
+			}
+			if (displayMode) {
+				afficherScreen();
+			}
+		}
+		System.out.println("SCORE : " + segmentDisplay + "  BLOCKS RESTANTS : "
+				+ screen.values().stream().filter(tileId -> tileId == 2).count());
 	}
 
 	static void adjustScreen(String outputStr) {
@@ -101,16 +118,6 @@ public class day13 {
 	static Map<Coord, Integer> screen = new HashMap<>();
 	static int segmentDisplay = 0;
 
-	static enum Tile {
-		EMPTY(0), WALL(1), BLOCK(2), PADDLE(3), BALL(4);
-
-		int id;
-
-		Tile(int id) {
-			this.id = id;
-		}
-	}
-
 	static class Coord {
 		int x;
 		int y;
@@ -148,7 +155,6 @@ public class day13 {
 	}
 
 	public static class Arcade {
-
 		boolean stopped = false;
 		long relativeBase = 0;
 		int pointeur = 0;
