@@ -14,7 +14,7 @@ public class day8 {
 
 	private static void part1() {
 		String data = ImportUtils.getString("./src/main/resources/2019/day8");
-		int numberOfLayers = data.length() / (25 * 6);
+		// int numberOfLayers = data.length() / (25 * 6);
 		List<String> layers = new ArrayList<>();
 		for (int i = 0; i < data.length(); i += 25 * 6) {
 			String layer = data.substring(i, i + 25 * 6);
@@ -44,7 +44,7 @@ public class day8 {
 
 	private static void part2() {
 		String data = ImportUtils.getString("./src/main/resources/2019/day8");
-		int numberOfLayers = data.length() / (25 * 6);
+		// int numberOfLayers = data.length() / (25 * 6);
 		List<String> layers = new ArrayList<>();
 		for (int i = 0; i < data.length(); i += 25 * 6) {
 			String layer = data.substring(i, i + 25 * 6);

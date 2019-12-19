@@ -84,10 +84,10 @@ public class day16 {
         liste.add(j);
       }
     }
-    int tailleUtilise = liste.size() - offset;
+
     // we dont care before offset (factor 0)
     liste = liste.subList(offset, liste.size());
-    System.out.println(liste.size());
+    // System.out.println(liste.size());
     // list size < offset => only factor 1 after
 
     for (int i = 0; i < 100; i++) {
