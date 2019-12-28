@@ -43,7 +43,7 @@ public class day18 {
   //
 
   static void initialize() {
-    List<String> input = ImportUtils.getListStringUnParLigne("./src/main/resources/2019/day18test");
+    List<String> input = ImportUtils.getListStringUnParLigne("./src/main/resources/2019/day18");
     for (int i = 0; i < input.size(); i++) {
       for (int j = 0; j < input.get(i).length(); j++) {
         if (input.get(i).charAt(j) != '#') {
