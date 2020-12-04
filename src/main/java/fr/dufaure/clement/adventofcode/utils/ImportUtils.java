@@ -56,6 +56,23 @@ public class ImportUtils {
     return input.toString();
   }
 
+  public static String getStringWithNewLine(String path) {
+    BufferedReader buffer;
+    StringBuilder input = new StringBuilder();
+    try {
+      buffer = new BufferedReader(new FileReader(path));
+      String line;
+      while ((line = buffer.readLine()) != null) {
+        input.append(line);
+        input.append("\n");
+      }
+      buffer.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return input.toString();
+  }
+
   public static List<String> getListStringUnParLigne(String path) {
     BufferedReader buffer;
     List<String> lignes = new ArrayList<>();
