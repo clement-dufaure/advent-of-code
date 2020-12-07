@@ -22,7 +22,6 @@ public class day4 {
         System.out.println(Arrays.asList(passports).stream().map(day4::createPassport).filter(Passport::check).count());
     }
 
-    // not 12
     public static void part2() {
         String data = ImportUtils.getStringWithNewLine("./src/main/resources/2020/day4");
         String[] passports = data.split("\\n\\n");
