@@ -9,21 +9,27 @@ import java.util.stream.Collectors;
 import fr.dufaure.clement.adventofcode.utils.ImportUtils;
 
 public class day7 {
-
+    
     public static void main(String[] args) {
         part1();
         part2();
     }
-
-    public static void part1() {
+    
+    // list of bag in a bag
+    static Map<String, List<Inclusion>> inclusions = new HashMap<>();
+    // list of bags can contain a bag
+    static Map<String, List<String>> reverseInclusions = new HashMap<>();
+    
+    static {
         List<String> liste = ImportUtils.getListStringUnParLigne("./src/main/resources/2020/day7");
         liste.stream().forEach(day7::addInformation);
+    }
+
+    public static void part1() {
         System.out.println(reverseInclusionAggregation("shiny gold").stream().distinct().count());
     }
 
     public static void part2() {
-        List<String> liste = ImportUtils.getListStringUnParLigne("./src/main/resources/2020/day7");
-        liste.stream().forEach(day7::addInformation);
         System.out.println(countTotalBagInside("shiny gold"));
     }
 
@@ -32,10 +38,6 @@ public class day7 {
     // static String regexPattern = "([a-z]* [a-z]*) bags contain (?:(?:([0-9]*
     // [a-z]* [a-z]*) bags?[,.] ?)|(?:no other bags))*";
 
-    // list of bag in a bag
-    static Map<String, List<Inclusion>> inclusions = new HashMap<>();
-    // list of bags can contain a bag
-    static Map<String, List<String>> reverseInclusions = new HashMap<>();;
 
     static void addInformation(String information) {
         String[] informations = information.split(" bags contain ");
