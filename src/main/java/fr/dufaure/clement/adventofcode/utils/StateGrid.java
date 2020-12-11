@@ -21,29 +21,27 @@ public class StateGrid<T> {
     }
 
     public void add(int x, int y, T t) {
-        Case<T> maCase = Case.of(Coord.of(x, y), t)
+        Case<T> maCase = Case.of(Coord.of(x, y), t);
         gridList.add(maCase);
         gridMap.put(Coord.of(x, y), maCase);
     }
 
     public void consolider() {
         for (Case<T> c : gridList) {
-            c.casesAdjacentes = gridList.stream().filter(myCase -> filterArround(c.coord, myCase.coord))
-                    .collect(Collectors.toList());
+            for (Direction d : Direction.values()) {
+                if (gridMap.containsKey(sum(c.coord, d))) {
+                    c.casesAdjacentes.put(d, gridMap.get(sum(c.coord, d)));
+                }
+            }
         }
     }
 
-    static boolean filterArround(Coord center, Coord around) {
-        return ((around.x == center.x + 1)
-                && (around.y == center.y + 1 || around.y == center.y || around.y == center.y - 1)
-                || ((around.x == center.x) && (around.y == center.y + 1 || around.y == center.y - 1))
-                || ((around.x == center.x - 1)
-                        && (around.y == center.y + 1 || around.y == center.y || around.y == center.y - 1)));
+    static Coord sum(Coord c, Direction d) {
+        return Coord.of(c.x + d.diffX, c.y + d.diffY);
     }
 
     public T get(int x, int y) {
-        return gridList.stream().filter(c -> c.coord.equals(Coord.of(x, y))).findFirst()
-                .orElseThrow(RuntimeException::new).value;
+        return gridMap.getOrDefault(Coord.of(x, y), Case.of(null, defaultValue)).value;
     }
 
     public int getMinX() {
@@ -78,19 +76,6 @@ public class StateGrid<T> {
         return gridList.stream().filter(c -> !c.value.equals(c.newValue)).count() != 0;
     }
 
-    // public List<T> getAround(int x, int y) {
-    // List<T> around = new ArrayList<>();
-    // around.add(get(x + 1, y + 1));
-    // around.add(get(x + 1, y));
-    // around.add(get(x + 1, y - 1));
-    // around.add(get(x, y + 1));
-    // around.add(get(x, y - 1));
-    // around.add(get(x - 1, y + 1));
-    // around.add(get(x - 1, y));
-    // around.add(get(x - 1, y - 1));
-    // return around;
-    // }
-
     @Override
     public boolean equals(Object obj) {
         if (obj != null && obj instanceof StateGrid) {
@@ -113,10 +98,10 @@ public class StateGrid<T> {
     }
 
     public static class Case<T> {
-        Coord coord;
+        public Coord coord;
         public T value;
         public T newValue;
-        public List<Case<T>> casesAdjacentes = new ArrayList<>();
+        public Map<Direction, Case<T>> casesAdjacentes = new HashMap<>();
 
         static <T> Case<T> of(Coord coord, T value) {
             Case<T> c = new Case<>();
@@ -151,10 +136,10 @@ public class StateGrid<T> {
     }
 
     public static class Coord {
-        int x;
-        int y;
+        public int x;
+        public int y;
 
-        static Coord of(int x, int y) {
+        public static Coord of(int x, int y) {
             Coord c = new Coord();
             c.x = x;
             c.y = y;
