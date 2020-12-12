@@ -159,6 +159,11 @@ public class StateGrid<T> {
             }
             return false;
         }
+
+        @Override
+        public String toString() {
+            return "(" + x + "," + y + ")";
+        }
     }
 
 }
