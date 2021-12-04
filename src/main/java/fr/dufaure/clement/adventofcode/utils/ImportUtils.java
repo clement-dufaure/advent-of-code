@@ -9,15 +9,12 @@ import java.util.List;
 public class ImportUtils {
 
   public static List<Integer> getListeEntierUnParLigne(String path) {
-    BufferedReader buffer;
     List<Integer> entiers = new ArrayList<>();
-    try {
-      buffer = new BufferedReader(new FileReader(path));
+    try (var buffer = new BufferedReader(new FileReader(path))) {
       String line;
       while ((line = buffer.readLine()) != null) {
         entiers.add(Integer.parseInt(line));
       }
-      buffer.close();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -25,15 +22,12 @@ public class ImportUtils {
   }
 
   public static List<Long> getListeLongUnParLigne(String path) {
-    BufferedReader buffer;
     List<Long> entiers = new ArrayList<>();
-    try {
-      buffer = new BufferedReader(new FileReader(path));
+    try (var buffer = new BufferedReader(new FileReader(path))) {
       String line;
       while ((line = buffer.readLine()) != null) {
         entiers.add(Long.parseLong(line));
       }
-      buffer.close();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -41,15 +35,12 @@ public class ImportUtils {
   }
 
   public static String getString(String path) {
-    BufferedReader buffer;
     StringBuilder input = new StringBuilder();
-    try {
-      buffer = new BufferedReader(new FileReader(path));
+    try (var buffer = new BufferedReader(new FileReader(path))) {
       String line;
       while ((line = buffer.readLine()) != null) {
         input.append(line);
       }
-      buffer.close();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -57,16 +48,13 @@ public class ImportUtils {
   }
 
   public static String getStringWithNewLine(String path) {
-    BufferedReader buffer;
     StringBuilder input = new StringBuilder();
-    try {
-      buffer = new BufferedReader(new FileReader(path));
+    try (var buffer = new BufferedReader(new FileReader(path))) {
       String line;
       while ((line = buffer.readLine()) != null) {
         input.append(line);
         input.append("\n");
       }
-      buffer.close();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -74,15 +62,12 @@ public class ImportUtils {
   }
 
   public static List<String> getListStringUnParLigne(String path) {
-    BufferedReader buffer;
     List<String> lignes = new ArrayList<>();
-    try {
-      buffer = new BufferedReader(new FileReader(path));
+    try (var buffer = new BufferedReader(new FileReader(path))) {
       String line;
       while ((line = buffer.readLine()) != null) {
         lignes.add(line);
       }
-      buffer.close();
     } catch (IOException e) {
       e.printStackTrace();
     }
