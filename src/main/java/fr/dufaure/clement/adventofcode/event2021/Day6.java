@@ -23,7 +23,6 @@ public class Day6 implements Day {
                 }
             }).toList());
             lanterfishs.addAll(newFishes);
-            System.out.println(lanterfishs.size());
         }
         return String.valueOf(lanterfishs.size());
     }
