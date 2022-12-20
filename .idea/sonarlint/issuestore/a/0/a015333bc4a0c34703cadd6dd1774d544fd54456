@@ -1,0 +1,27 @@
+
+I
+java:S1121)".Extract the assignment out of this expression.(ÏˆÚıÿÿÿÿ
+I
+java:S1121*".Extract the assignment out of this expression.(ıŒ™Ÿùÿÿÿÿ
+D
+java:S1121+".Extract the assignment out of this expression.(¼æôì
+n	java:S135#"YReduce the total number of break and continue statements in this loop to use at most one.(ˆ“Ìå
+f
+java:S1301&"KReplace this "switch" statement by "if" statements to increase readability.(ÍøÇøÿÿÿÿ
+m
+java:S3776"RRefactor this method to reduce its Cognitive Complexity from 22 to the 15 allowed.(×òÄ—ûÿÿÿÿ
+1
+java:S3626."Remove this redundant jump.(ÉŠ©ƒ
+1
+java:S3626;"Remove this redundant jump.(ÉŠ©ƒ
+<	java:S131&""Add a default case to this switch.(ÍøÇøÿÿÿÿ
+½
+java:S1845]"¡Rename field "size" to prevent any misunderstanding/clash with method "size" defined in superclass "fr.dufaure.clement.adventofcode.event2022.Day7$AbstractFile".(ëèëùúÿÿÿÿ
+¸
+java:S1845x"¡Rename field "size" to prevent any misunderstanding/clash with method "size" defined in superclass "fr.dufaure.clement.adventofcode.event2022.Day7$AbstractFile".(ØíŸ
+b
+java:S6201”"LReplace this instanceof check and cast with 'instanceof Directory directory'(©¦¤%
+b
+java:S6201”"LReplace this instanceof check and cast with 'instanceof Directory directory'(©¦¤%
+@
+java:S6217J"%Remove this redundant permitted list.(ƒƒ¢æúÿÿÿÿ

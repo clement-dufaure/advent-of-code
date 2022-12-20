@@ -1,0 +1,12 @@
+
+w
+java:S3008
+"aRename this field "OFFSET_ASCII_LOWERCASE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ú—ŸÞ
+w
+java:S3008"aRename this field "OFFSET_ASCII_UPPERCASE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ËÐ®”
+}
+java:S3008"bRename this field "PRIORITY_OF_LOWERCASE_A" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ž•°òúÿÿÿÿ
+x
+java:S3008"bRename this field "PRIORITY_OF_UPPERCASE_A" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(—™Î¹
+_
+java:S1612"DReplace this lambda with method reference 'Rucksack::fromOneString'.(´õ€Éüÿÿÿÿ
